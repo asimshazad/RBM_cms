@@ -70,4 +70,32 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::get(config('laraadmin.adminRoute') . '/backup_dt_ajax', 'LA\BackupsController@dtajax');
 	Route::post(config('laraadmin.adminRoute') . '/create_backup_ajax', 'LA\BackupsController@create_backup_ajax');
 	Route::get(config('laraadmin.adminRoute') . '/downloadBackup/{id}', 'LA\BackupsController@downloadBackup');
+
+	/* ================== Customers ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/customers', 'LA\CustomersController');
+	Route::get(config('laraadmin.adminRoute') . '/customer_dt_ajax', 'LA\CustomersController@dtajax');
+
+	/* ================== Expense_Categories ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/expense_categories', 'LA\Expense_CategoriesController');
+	Route::get(config('laraadmin.adminRoute') . '/expense_category_dt_ajax', 'LA\Expense_CategoriesController@dtajax');
+
+	/* ================== Add_Expenses ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/add_expenses', 'LA\Add_ExpensesController');
+	Route::get(config('laraadmin.adminRoute') . '/add_expense_dt_ajax', 'LA\Add_ExpensesController@dtajax');
+
+	/* ================== Orders ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/orders', 'LA\OrdersController');
+	Route::get(config('laraadmin.adminRoute') . '/order_dt_ajax', 'LA\OrdersController@dtajax');
+
+	/* ================== Measurement_Categories ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/measurement_categories', 'LA\Measurement_CategoriesController');
+	Route::get(config('laraadmin.adminRoute') . '/measurement_category_dt_ajax', 'LA\Measurement_CategoriesController@dtajax');
+
+	/* ================== Measurement_Parts ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/measurement_parts', 'LA\Measurement_PartsController');
+	Route::get(config('laraadmin.adminRoute') . '/measurement_part_dt_ajax', 'LA\Measurement_PartsController@dtajax');
+
+	/* ================== SMS_Templates ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/sms_templates', 'LA\SMS_TemplatesController');
+	Route::get(config('laraadmin.adminRoute') . '/sms_template_dt_ajax', 'LA\SMS_TemplatesController@dtajax');
 });
