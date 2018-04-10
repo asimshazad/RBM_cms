@@ -72,8 +72,13 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::get(config('laraadmin.adminRoute') . '/downloadBackup/{id}', 'LA\BackupsController@downloadBackup');
 
 	/* ================== Customers ================== */
+
 	Route::resource(config('laraadmin.adminRoute') . '/customers', 'LA\CustomersController');
 	Route::get(config('laraadmin.adminRoute') . '/customer_dt_ajax', 'LA\CustomersController@dtajax');
+    Route::get(config('laraadmin.adminRoute') . '/customer/measurement/{id?}', 'LA\CustomersController@customer_measurement');
+	Route::post(config('laraadmin.adminRoute') . '/customer/get_categories', 'LA\CustomersController@get_categories');
+	Route::post(config('laraadmin.adminRoute') . '/customer/save', 'LA\CustomersController@saveMeasurement');
+
 
 	/* ================== Expense_Categories ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/expense_categories', 'LA\Expense_CategoriesController');
@@ -81,7 +86,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 
 	/* ================== Add_Expenses ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/add_expenses', 'LA\Add_ExpensesController');
-	Route::get(config('laraadmin.adminRoute') . '/add_expense_dt_ajax', 'LA\Add_ExpensesController@dtajax');
+	Route::get(config('laraadmin.adminRoute') . '/add_expense_dt_ajax/', 'LA\Add_ExpensesController@dtajax');
 
 	/* ================== Orders ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/orders', 'LA\OrdersController');
@@ -98,4 +103,8 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	/* ================== SMS_Templates ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/sms_templates', 'LA\SMS_TemplatesController');
 	Route::get(config('laraadmin.adminRoute') . '/sms_template_dt_ajax', 'LA\SMS_TemplatesController@dtajax');
+
+	/* ================== Measurements ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/measurements', 'LA\MeasurementsController');
+	Route::get(config('laraadmin.adminRoute') . '/measurement_dt_ajax', 'LA\MeasurementsController@dtajax');
 });

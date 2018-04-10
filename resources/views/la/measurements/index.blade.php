@@ -1,14 +1,14 @@
 @extends("la.layouts.app")
 
-@section("contentheader_title", "Customers")
-@section("contentheader_description", "Customers listing")
-@section("section", "Customers")
+@section("contentheader_title", "Measurements")
+@section("contentheader_description", "Measurements listing")
+@section("section", "Measurements")
 @section("sub_section", "Listing")
-@section("htmlheader_title", "Customers Listing")
+@section("htmlheader_title", "Measurements Listing")
 
 @section("headerElems")
-@la_access("Customers", "create")
-	<button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal">Add Customer</button>
+@la_access("Measurements", "create")
+	<button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal">Add Measurement</button>
 @endla_access
 @endsection
 
@@ -23,16 +23,6 @@
         </ul>
     </div>
 @endif
-
-
-
-
-@if(session()->has('success'))
-    <div class="alert alert-success">
-        {{ session()->get('success') }}
-    </div>
-@endif
-
 
 <div class="box box-success">
 	<!--<div class="box-header"></div>-->
@@ -55,26 +45,22 @@
 	</div>
 </div>
 
-@la_access("Customers", "create")
+@la_access("Measurements", "create")
 <div class="modal fade" id="AddModal" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+				<h4 class="modal-title" id="myModalLabel">Add Measurement</h4>
 			</div>
-			{!! Form::open(['action' => 'LA\CustomersController@store', 'id' => 'customer-add-form']) !!}
+			{!! Form::open(['action' => 'LA\MeasurementsController@store', 'id' => 'measurement-add-form']) !!}
 			<div class="modal-body">
 				<div class="box-body">
                     @la_form($module)
 					
 					{{--
-					@la_input($module, 'name')
-					@la_input($module, 'email')
-					@la_input($module, 'phone')
-					@la_input($module, 'city')
-					@la_input($module, 'department')
-					@la_input($module, 'image')
+					@la_input($module, 'customer_id')
+					@la_input($module, 'category_id')
 					--}}
 				</div>
 			</div>
@@ -101,7 +87,7 @@ $(function () {
 	$("#example1").DataTable({
 		processing: true,
         serverSide: true,
-        ajax: "{{ url(config('laraadmin.adminRoute') . '/customer_dt_ajax') }}",
+        ajax: "{{ url(config('laraadmin.adminRoute') . '/measurement_dt_ajax') }}",
 		language: {
 			lengthMenu: "_MENU_",
 			search: "_INPUT_",
@@ -111,7 +97,7 @@ $(function () {
 		columnDefs: [ { orderable: false, targets: [-1] }],
 		@endif
 	});
-	$("#customer-add-form").validate({
+	$("#measurement-add-form").validate({
 		
 	});
 });

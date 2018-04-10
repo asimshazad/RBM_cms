@@ -30,56 +30,7 @@
 			<div class="dats1"><i class="fa fa-envelope-o"></i> superadmin@gmail.com</div>
 			<div class="dats1"><i class="fa fa-map-marker"></i> Pune, India</div>
 		</div>
-		<div class="col-md-4">
-			<!--
-			<div class="teamview">
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user1-128x128.jpg') }}" alt=""><i class="status-online"></i></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user2-160x160.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user3-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user4-128x128.jpg') }}" alt=""><i class="status-online"></i></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user5-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user6-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user7-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user8-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user5-128x128.jpg') }}" alt=""></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user6-128x128.jpg') }}" alt=""><i class="status-online"></i></a>
-				<a class="face" data-toggle="tooltip" data-placement="top" title="John Doe"><img src="{{ asset('la-assets/img/user7-128x128.jpg') }}" alt=""></a>
-			</div>
-			-->
-			<div class="dats1 pb">
-				<div class="clearfix">
-					<span class="pull-left">Task #1</span>
-					<small class="pull-right">20%</small>
-				</div>
-				<div class="progress progress-xs active">
-					<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">20% Complete</span>
-					</div>
-				</div>
-			</div>
-			<div class="dats1 pb">
-				<div class="clearfix">
-					<span class="pull-left">Task #2</span>
-					<small class="pull-right">90%</small>
-				</div>
-				<div class="progress progress-xs active">
-					<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 90%" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">90% Complete</span>
-					</div>
-				</div>
-			</div>
-			<div class="dats1 pb">
-				<div class="clearfix">
-					<span class="pull-left">Task #3</span>
-					<small class="pull-right">60%</small>
-				</div>
-				<div class="progress progress-xs active">
-					<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-						<span class="sr-only">60% Complete</span>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		<div class="col-md-1 actions">
 			@la_access("Permissions", "edit")
 				<a href="{{ url(config('laraadmin.adminRoute') . '/permissions/'.$permission->id.'/edit') }}" class="btn btn-xs btn-edit btn-default"><i class="fa fa-pencil"></i></a><br>
