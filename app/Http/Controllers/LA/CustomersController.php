@@ -18,6 +18,7 @@ use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
 use App\Models\Customer;
+use App\Models\UserMeasurements;
 
 class CustomersController extends Controller
 {
@@ -201,7 +202,9 @@ class CustomersController extends Controller
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-	
+
+
+
 	/**
 	 * Datatable Ajax fetch
 	 *
@@ -231,6 +234,9 @@ class CustomersController extends Controller
 			
 			if($this->show_action) {
 				$output = '';
+
+				$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customer/measurement/'.$data->data[$i][0]).'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;margin:0 3px;"><i class="fa fa-list"></i></a>';
+
 				if(Module::hasAccess("Customers", "edit")) {
 					$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customers/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
 				}
@@ -246,4 +252,89 @@ class CustomersController extends Controller
 		$out->setData($data);
 		return $out;
 	}
+
+
+	public function customer_measurement($id)
+	{
+	
+		$module = Module::get('Measurements');
+
+		$categories = DB::select( DB::raw("SELECT * FROM measurement_categories") );
+	
+		return view('la.customers.customer_measurement',compact('categories'));
+		
+	}
+
+
+	public function get_categories(Request $request)
+	{
+		//$id =  $request->id;
+		$id =  $request->route('id');
+
+		$parts = DB::select( DB::raw("SELECT * FROM measurement_parts where category_id =$id") );
+
+		// $parts = DB::table('measurement_parts')
+	 //    ->select('measurement_parts.*', 'user_measurements.description')
+	 //    ->join('user_measurements', 'measurement_parts.category_id', '=', 'user_measurements.cat_id')
+	 //    ->where('user_measurements.customer_id', 1)
+	 //    ->where('measurement_parts.category_id', $id)
+	 //    ->get();
+
+
+
+		$output ='';
+
+		if($parts){
+
+			$output.= '<input type="text" name="customer_id" value='.$id.'  />';
+
+			foreach($parts as $part){
+
+				//$output.= $part->description;
+
+				$output.= '<div class="form-group">
+							<label for="total_amount">'.ucwords($part->part).'* :</label>
+							<input required=""  class="form-control" 
+							placeholder="Enter '.ucfirst($part->part).'" 
+							name="'.str_slug($part->part).'"
+							type="text" >
+						    </div>';
+
+			}
+	    } else{
+
+	    	$output.= '0';
+
+	    }
+
+		return $output;
+
+	}
+
+
+	public function saveMeasurement(Request $request)
+	{
+
+		$all = $request->all();
+		$cat_id = $request->cat_id;
+		$customer_id = $request->customer_id;
+
+		unset($all['_token']);
+		unset($all['cat_id']);
+		unset($all['customer_id']);
+        $desc = json_encode($all);
+
+		$flight = UserMeasurements::updateOrCreate(
+		   ['cat_id' => $cat_id, 'customer_id' => $customer_id],
+		   ['description' => $desc]
+		);
+
+        return redirect('admin/customers')->with('success', 'User Measurements are saved successfully'); 
+
+	}
+
+	
+
+
+
 }
