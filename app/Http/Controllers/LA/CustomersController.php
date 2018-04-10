@@ -3,9 +3,7 @@
  * Controller genrated using LaraAdmin
  * Help: http://laraadmin.com
  */
-
 namespace App\Http\Controllers\LA;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -16,16 +14,13 @@ use Datatables;
 use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
-
 use App\Models\Customer;
 use App\Models\UserMeasurements;
-
 class CustomersController extends Controller
 {
 	public $show_action = true;
 	public $view_col = 'name';
 	public $listing_cols = ['id', 'name', 'email', 'phone', 'city', 'department', 'image'];
-	
 	public function __construct() {
 		// Field Access of Listing Columns
 		if(\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
@@ -37,7 +32,6 @@ class CustomersController extends Controller
 			$this->listing_cols = ModuleFields::listingColumnAccessScan('Customers', $this->listing_cols);
 		}
 	}
-	
 	/**
 	 * Display a listing of the Customers.
 	 *
@@ -46,7 +40,6 @@ class CustomersController extends Controller
 	public function index()
 	{
 		$module = Module::get('Customers');
-		
 		if(Module::hasAccess($module->id)) {
 			return View('la.customers.index', [
 				'show_actions' => $this->show_action,
@@ -57,7 +50,6 @@ class CustomersController extends Controller
             return redirect(config('laraadmin.adminRoute')."/");
         }
 	}
-
 	/**
 	 * Show the form for creating a new customer.
 	 *
@@ -67,7 +59,6 @@ class CustomersController extends Controller
 	{
 		//
 	}
-
 	/**
 	 * Store a newly created customer in database.
 	 *
@@ -77,24 +68,17 @@ class CustomersController extends Controller
 	public function store(Request $request)
 	{
 		if(Module::hasAccess("Customers", "create")) {
-		
 			$rules = Module::validateRules("Customers", $request);
-			
 			$validator = Validator::make($request->all(), $rules);
-			
 			if ($validator->fails()) {
 				return redirect()->back()->withErrors($validator)->withInput();
 			}
-			
 			$insert_id = Module::insert("Customers", $request);
-			
 			return redirect()->route(config('laraadmin.adminRoute') . '.customers.index');
-			
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-
 	/**
 	 * Display the specified customer.
 	 *
@@ -104,12 +88,10 @@ class CustomersController extends Controller
 	public function show($id)
 	{
 		if(Module::hasAccess("Customers", "view")) {
-			
 			$customer = Customer::find($id);
 			if(isset($customer->id)) {
 				$module = Module::get('Customers');
 				$module->row = $customer;
-				
 				return view('la.customers.show', [
 					'module' => $module,
 					'view_col' => $this->view_col,
@@ -126,7 +108,6 @@ class CustomersController extends Controller
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-
 	/**
 	 * Show the form for editing the specified customer.
 	 *
@@ -139,9 +120,7 @@ class CustomersController extends Controller
 			$customer = Customer::find($id);
 			if(isset($customer->id)) {	
 				$module = Module::get('Customers');
-				
 				$module->row = $customer;
-				
 				return view('la.customers.edit', [
 					'module' => $module,
 					'view_col' => $this->view_col,
@@ -156,7 +135,6 @@ class CustomersController extends Controller
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-
 	/**
 	 * Update the specified customer in storage.
 	 *
@@ -167,24 +145,17 @@ class CustomersController extends Controller
 	public function update(Request $request, $id)
 	{
 		if(Module::hasAccess("Customers", "edit")) {
-			
 			$rules = Module::validateRules("Customers", $request, true);
-			
 			$validator = Validator::make($request->all(), $rules);
-			
 			if ($validator->fails()) {
 				return redirect()->back()->withErrors($validator)->withInput();;
 			}
-			
 			$insert_id = Module::updateRow("Customers", $request, $id);
-			
 			return redirect()->route(config('laraadmin.adminRoute') . '.customers.index');
-			
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-
 	/**
 	 * Remove the specified customer from storage.
 	 *
@@ -195,16 +166,12 @@ class CustomersController extends Controller
 	{
 		if(Module::hasAccess("Customers", "delete")) {
 			Customer::find($id)->delete();
-			
 			// Redirecting to index() method
 			return redirect()->route(config('laraadmin.adminRoute') . '.customers.index');
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
 	}
-
-
-
 	/**
 	 * Datatable Ajax fetch
 	 *
@@ -215,11 +182,9 @@ class CustomersController extends Controller
 		$values = DB::table('customers')->select($this->listing_cols)->whereNull('deleted_at');
 		$out = Datatables::of($values)->make();
 		$data = $out->getData();
-
 		$fields_popup = ModuleFields::getModuleFields('Customers');
-		
 		for($i=0; $i < count($data->data); $i++) {
-			for ($j=0; $j < count($this->listing_cols); $j++) { 
+			for ($j=0; $j < count($this->listing_cols); $j++) {
 				$col = $this->listing_cols[$j];
 				if($fields_popup[$col] != null && starts_with($fields_popup[$col]->popup_vals, "@")) {
 					$data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
@@ -231,16 +196,12 @@ class CustomersController extends Controller
 				//    $data->data[$i][$j];
 				// }
 			}
-			
 			if($this->show_action) {
 				$output = '';
-
 				$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customer/measurement/'.$data->data[$i][0]).'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;margin:0 3px;"><i class="fa fa-list"></i></a>';
-
 				if(Module::hasAccess("Customers", "edit")) {
 					$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customers/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
 				}
-				
 				if(Module::hasAccess("Customers", "delete")) {
 					$output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.customers.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
 					$output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
@@ -252,89 +213,96 @@ class CustomersController extends Controller
 		$out->setData($data);
 		return $out;
 	}
-
-
 	public function customer_measurement($id)
 	{
-	
 		$module = Module::get('Measurements');
-
 		$categories = DB::select( DB::raw("SELECT * FROM measurement_categories") );
-	
 		return view('la.customers.customer_measurement',compact('categories'));
-		
 	}
-
 
 	public function get_categories(Request $request)
 	{
-		//$id =  $request->id;
-		$id =  $request->route('id');
+		 $id =  $request->id;
+		 $customer_id = $request->customer_id;
+        //DB::enableQueryLog();
+
+
+		
+
+		//print_r(json_decode($json, true));
+		//$laQuery = DB::getQueryLog();
+
+		//echo '<pre>';print_r($laQuery);
+
+        $res = array();
+		$output ='';
+		$msg ='';
 
 		$parts = DB::select( DB::raw("SELECT * FROM measurement_parts where category_id =$id") );
 
-		// $parts = DB::table('measurement_parts')
-	 //    ->select('measurement_parts.*', 'user_measurements.description')
-	 //    ->join('user_measurements', 'measurement_parts.category_id', '=', 'user_measurements.cat_id')
-	 //    ->where('user_measurements.customer_id', 1)
-	 //    ->where('measurement_parts.category_id', $id)
-	 //    ->get();
-
-
-
-		$output ='';
 
 		if($parts){
 
-			$output.= '<input type="text" name="customer_id" value='.$id.'  />';
-
 			foreach($parts as $part){
-
-				//$output.= $part->description;
-
 				$output.= '<div class="form-group">
 							<label for="total_amount">'.ucwords($part->part).'* :</label>
-							<input required=""  class="form-control" 
-							placeholder="Enter '.ucfirst($part->part).'" 
+							<input required=""  class="form-control"
+							placeholder="Enter '.ucfirst($part->part).'"
 							name="'.str_slug($part->part).'"
 							type="text" >
 						    </div>';
-
 			}
-	    } else{
-
-	    	$output.= '0';
-
 	    }
 
-		return $output;
+        $Umsr = DB::select( DB::raw("SELECT * FROM user_measurements where cat_id = $id && customer_id = $customer_id ") );
+
+		if(count($Umsr)){
+
+			$json =  $Umsr[0]->description;
+
+	        $rec =  json_decode($json, true);
+
+	        if($rec)
+	        {
+	        	$msg.='<ul class="list-group">';
+	        	$msg.='<li class="list-group-item active"><strong class="text-center">User Measurements</strong> </li>';
+		    	foreach($rec as $key=>$row){
+
+		    		$msg.= '<li class="list-group-item">'.$key.'<span class="pull-right">'.$row.'</span></li>';
+
+		    	}
+
+		    	$msg.='</ul>';
+	        }
+		}
+
+
+
+
+	    $res['parts'] = $output;
+	    $res['records'] = $msg;
+
+	    echo json_encode($res);
+
 
 	}
 
 
 	public function saveMeasurement(Request $request)
 	{
-
 		$all = $request->all();
 		$cat_id = $request->cat_id;
 		$customer_id = $request->customer_id;
-
 		unset($all['_token']);
 		unset($all['cat_id']);
 		unset($all['customer_id']);
         $desc = json_encode($all);
-
-		$flight = UserMeasurements::updateOrCreate(
+		UserMeasurements::updateOrCreate(
 		   ['cat_id' => $cat_id, 'customer_id' => $customer_id],
 		   ['description' => $desc]
 		);
-
-        return redirect('admin/customers')->with('success', 'User Measurements are saved successfully'); 
-
+        return redirect('admin/customers')->with('success', 'User Measurements are saved successfully');
 	}
-
-	
-
 
 
 }
