@@ -24,7 +24,7 @@ class AssignmentsController extends Controller
 	public $show_action = true;
 	public $view_col = 'category_id';
 	public $listing_cols = ['id', 'category_id'];
-	
+
 	public function __construct() {
 		// Field Access of Listing Columns
 		if(\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
@@ -36,7 +36,7 @@ class AssignmentsController extends Controller
 			$this->listing_cols = ModuleFields::listingColumnAccessScan('Assignments', $this->listing_cols);
 		}
 	}
-	
+
 	/**
 	 * Display a listing of the Assignments.
 	 *
@@ -44,8 +44,11 @@ class AssignmentsController extends Controller
 	 */
 	public function index()
 	{
-		$module = Module::get('Assignments');
-		
+
+        $categories = DB::select( DB::raw("SELECT * FROM categories ORDER BY id DESC") );
+
+		return view('la.assignments.index',compact('categories'));
+
 		if(Module::hasAccess($module->id)) {
 			return View('la.assignments.index', [
 				'show_actions' => $this->show_action,

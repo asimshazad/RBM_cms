@@ -32,6 +32,9 @@ class DashboardController extends Controller
      *
      * @return Response
      */
+
+
+
     public function index()
     {
 
@@ -40,6 +43,11 @@ class DashboardController extends Controller
         $employees= DB::table("employees")->count();
         $expenses= DB::table("add_expenses")->count();
 
-        return view('la.dashboard',compact('customers','orders','employees','expenses'));
+
+        $latest_customers = DB::table('customers')->select('*')->orderBy('id','desc')->take(5)->get();
+        $latest_orders = DB::table('orders')->select('*')->orderBy('id','desc')->take(5)->get();
+
+
+        return view('la.dashboard',compact('customers','orders','employees','expenses','latest_customers','latest_orders'));
     }
 }

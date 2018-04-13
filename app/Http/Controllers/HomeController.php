@@ -3,12 +3,9 @@
  * Controller genrated using LaraAdmin
  * Help: http://laraadmin.com
  */
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests;
 use Illuminate\Http\Request;
-
 /**
  * Class HomeController
  * @package App\Http\Controllers
@@ -22,9 +19,9 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        
-    }
+        $this->middleware('auth');
 
+    }
     /**
      * Show the application dashboard.
      *
@@ -33,15 +30,15 @@ class HomeController extends Controller
     public function index()
     {
         $roleCount = \App\Role::count();
-		if($roleCount != 0) {
-			if($roleCount != 0) {
-				return view('home');
-			}
-		} else {
-			return view('errors.error', [
-				'title' => 'Migration not completed',
-				'message' => 'Please run command <code>php artisan db:seed</code> to generate required table data.',
-			]);
-		}
+        if($roleCount != 0) {
+            if($roleCount != 0) {
+                return view('home');
+            }
+        } else {
+            return view('errors.error', [
+                'title' => 'Migration not completed',
+                'message' => 'Please run command <code>php artisan db:seed</code> to generate required table data.',
+            ]);
+        }
     }
 }
