@@ -9,6 +9,7 @@ namespace App\Http\Controllers\LA;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use DB;
 
 /**
  * Class DashboardController
@@ -33,6 +34,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('la.dashboard');
+
+        $customers= DB::table("customers")->count();
+        $orders= DB::table("orders")->count();
+        $employees= DB::table("employees")->count();
+        $expenses= DB::table("add_expenses")->count();
+
+        return view('la.dashboard',compact('customers','orders','employees','expenses'));
     }
 }

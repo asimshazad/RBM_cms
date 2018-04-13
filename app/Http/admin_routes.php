@@ -61,9 +61,6 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::get(config('laraadmin.adminRoute') . '/employee_dt_ajax', 'LA\EmployeesController@dtajax');
 	Route::post(config('laraadmin.adminRoute') . '/change_password/{id}', 'LA\EmployeesController@change_password');
 	
-	/* ================== Organizations ================== */
-	Route::resource(config('laraadmin.adminRoute') . '/organizations', 'LA\OrganizationsController');
-	Route::get(config('laraadmin.adminRoute') . '/organization_dt_ajax', 'LA\OrganizationsController@dtajax');
 
 	/* ================== Backups ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/backups', 'LA\BackupsController');
@@ -92,19 +89,22 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::resource(config('laraadmin.adminRoute') . '/orders', 'LA\OrdersController');
 	Route::get(config('laraadmin.adminRoute') . '/order_dt_ajax', 'LA\OrdersController@dtajax');
 
-	/* ================== Measurement_Categories ================== */
-	Route::resource(config('laraadmin.adminRoute') . '/measurement_categories', 'LA\Measurement_CategoriesController');
-	Route::get(config('laraadmin.adminRoute') . '/measurement_category_dt_ajax', 'LA\Measurement_CategoriesController@dtajax');
 
-	/* ================== Measurement_Parts ================== */
-	Route::resource(config('laraadmin.adminRoute') . '/measurement_parts', 'LA\Measurement_PartsController');
-	Route::get(config('laraadmin.adminRoute') . '/measurement_part_dt_ajax', 'LA\Measurement_PartsController@dtajax');
 
 	/* ================== SMS_Templates ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/sms_templates', 'LA\SMS_TemplatesController');
 	Route::get(config('laraadmin.adminRoute') . '/sms_template_dt_ajax', 'LA\SMS_TemplatesController@dtajax');
 
-	/* ================== Measurements ================== */
-	Route::resource(config('laraadmin.adminRoute') . '/measurements', 'LA\MeasurementsController');
-	Route::get(config('laraadmin.adminRoute') . '/measurement_dt_ajax', 'LA\MeasurementsController@dtajax');
+
+	/* ================== Categories ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/categories', 'LA\CategoriesController');
+	Route::get(config('laraadmin.adminRoute') . '/category_dt_ajax', 'LA\CategoriesController@dtajax');
+
+	/* ================== Parts ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/parts', 'LA\PartsController');
+	Route::get(config('laraadmin.adminRoute') . '/part_dt_ajax', 'LA\PartsController@dtajax');
+
+	/* ================== Assignments ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/assignments', 'LA\AssignmentsController');
+	Route::get(config('laraadmin.adminRoute') . '/assignment_dt_ajax', 'LA\AssignmentsController@dtajax');
 });

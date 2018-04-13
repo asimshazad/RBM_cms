@@ -17,22 +17,15 @@ use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
-use Dwij\Laraadmin\Helpers\LAHelper;
-
-use App\User;
 use App\Models\Employee;
-use App\Role;
-use Mail;
-use Log;
 
 class EmployeesController extends Controller
 {
 	public $show_action = true;
 	public $view_col = 'name';
-	public $listing_cols = ['id', 'name', 'designation', 'mobile', 'email', 'dept'];
+	public $listing_cols = ['id', 'name', 'designation', 'gender', 'mobile', 'mobile2', 'email', 'dept', 'city', 'address', 'about', 'date_birth', 'date_hire', 'date_left', 'salary_cur'];
 	
 	public function __construct() {
-		
 		// Field Access of Listing Columns
 		if(\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
 			$this->middleware(function ($request, $next) {
@@ -92,34 +85,7 @@ class EmployeesController extends Controller
 				return redirect()->back()->withErrors($validator)->withInput();
 			}
 			
-			// generate password
-			$password = LAHelper::gen_password();
-			
-			// Create Employee
-			$employee_id = Module::insert("Employees", $request);
-			// Create User
-			$user = User::create([
-				'name' => $request->name,
-				'email' => $request->email,
-				'password' => bcrypt($password),
-				'context_id' => $employee_id,
-				'type' => "Employee",
-			]);
-	
-			// update user role
-			$user->detachRoles();
-			$role = Role::find($request->role);
-			$user->attachRole($role);
-			
-			if(env('MAIL_USERNAME') != null && env('MAIL_USERNAME') != "null" && env('MAIL_USERNAME') != "") {
-				// Send mail to User his Password
-				Mail::send('emails.send_login_cred', ['user' => $user, 'password' => $password], function ($m) use ($user) {
-					$m->from('hello@laraadmin.com', 'LaraAdmin');
-					$m->to($user->email, $user->name)->subject('LaraAdmin - Your Login Credentials');
-				});
-			} else {
-				Log::info("User created: username: ".$user->email." Password: ".$password);
-			}
+			$insert_id = Module::insert("Employees", $request);
 			
 			return redirect()->route(config('laraadmin.adminRoute') . '.employees.index');
 			
@@ -143,11 +109,7 @@ class EmployeesController extends Controller
 				$module = Module::get('Employees');
 				$module->row = $employee;
 				
-				// Get User Table Information
-				$user = User::where('context_id', '=', $id)->firstOrFail();
-				
 				return view('la.employees.show', [
-					'user' => $user,
 					'module' => $module,
 					'view_col' => $this->view_col,
 					'no_header' => true,
@@ -172,21 +134,16 @@ class EmployeesController extends Controller
 	 */
 	public function edit($id)
 	{
-		if(Module::hasAccess("Employees", "edit")) {
-			
+		if(Module::hasAccess("Employees", "edit")) {			
 			$employee = Employee::find($id);
-			if(isset($employee->id)) {
+			if(isset($employee->id)) {	
 				$module = Module::get('Employees');
 				
 				$module->row = $employee;
 				
-				// Get User Table Information
-				$user = User::where('context_id', '=', $id)->firstOrFail();
-				
 				return view('la.employees.edit', [
 					'module' => $module,
 					'view_col' => $this->view_col,
-					'user' => $user,
 				])->with('employee', $employee);
 			} else {
 				return view('errors.404', [
@@ -218,17 +175,7 @@ class EmployeesController extends Controller
 				return redirect()->back()->withErrors($validator)->withInput();;
 			}
 			
-			$employee_id = Module::updateRow("Employees", $request, $id);
-        	
-			// Update User
-			$user = User::where('context_id', $employee_id)->first();
-			$user->name = $request->name;
-			$user->save();
-			
-			// update user role
-			$user->detachRoles();
-			$role = Role::find($request->role);
-			$user->attachRole($role);
+			$insert_id = Module::updateRow("Employees", $request, $id);
 			
 			return redirect()->route(config('laraadmin.adminRoute') . '.employees.index');
 			
@@ -298,42 +245,5 @@ class EmployeesController extends Controller
 		}
 		$out->setData($data);
 		return $out;
-	}
-	
-	/**
-     * Change Employee Password
-     *
-     * @return
-     */
-	public function change_password($id, Request $request) {
-		
-		$validator = Validator::make($request->all(), [
-            'password' => 'required|min:6',
-			'password_confirmation' => 'required|min:6|same:password'
-        ]);
-		
-		if ($validator->fails()) {
-			return \Redirect::to(config('laraadmin.adminRoute') . '/employees/'.$id)->withErrors($validator);
-		}
-		
-		$employee = Employee::find($id);
-		$user = User::where("context_id", $employee->id)->where('type', 'Employee')->first();
-		$user->password = bcrypt($request->password);
-		$user->save();
-		
-		\Session::flash('success_message', 'Password is successfully changed');
-		
-		// Send mail to User his new Password
-		if(env('MAIL_USERNAME') != null && env('MAIL_USERNAME') != "null" && env('MAIL_USERNAME') != "") {
-			// Send mail to User his new Password
-			Mail::send('emails.send_login_cred_change', ['user' => $user, 'password' => $request->password], function ($m) use ($user) {
-				$m->from(LAConfigs::getByKey('default_email'), LAConfigs::getByKey('sitename'));
-				$m->to($user->email, $user->name)->subject('LaraAdmin - Login Credentials chnaged');
-			});
-		} else {
-			Log::info("User change_password: username: ".$user->email." Password: ".$request->password);
-		}
-		
-		return redirect(config('laraadmin.adminRoute') . '/employees/'.$id.'#tab-account-settings');
 	}
 }

@@ -17,38 +17,37 @@ use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
-use App\Models\Measurement;
+use App\Models\Assignment;
 
-class MeasurementsController extends Controller
+class AssignmentsController extends Controller
 {
 	public $show_action = true;
-	public $view_col = 'customer_id';
-	public $listing_cols = ['id', 'customer_id', 'category_id'];
+	public $view_col = 'category_id';
+	public $listing_cols = ['id', 'category_id'];
 	
 	public function __construct() {
 		// Field Access of Listing Columns
 		if(\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
 			$this->middleware(function ($request, $next) {
-				$this->listing_cols = ModuleFields::listingColumnAccessScan('Measurements', $this->listing_cols);
+				$this->listing_cols = ModuleFields::listingColumnAccessScan('Assignments', $this->listing_cols);
 				return $next($request);
 			});
 		} else {
-			$this->listing_cols = ModuleFields::listingColumnAccessScan('Measurements', $this->listing_cols);
+			$this->listing_cols = ModuleFields::listingColumnAccessScan('Assignments', $this->listing_cols);
 		}
 	}
 	
 	/**
-	 * Display a listing of the Measurements.
+	 * Display a listing of the Assignments.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index()
 	{
-		$module = Module::get('Measurements');
-
+		$module = Module::get('Assignments');
 		
 		if(Module::hasAccess($module->id)) {
-			return View('la.measurements.index', [
+			return View('la.assignments.index', [
 				'show_actions' => $this->show_action,
 				'listing_cols' => $this->listing_cols,
 				'module' => $module
@@ -59,7 +58,7 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new measurement.
+	 * Show the form for creating a new assignment.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -69,16 +68,16 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Store a newly created measurement in database.
+	 * Store a newly created assignment in database.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request)
 	{
-		if(Module::hasAccess("Measurements", "create")) {
+		if(Module::hasAccess("Assignments", "create")) {
 		
-			$rules = Module::validateRules("Measurements", $request);
+			$rules = Module::validateRules("Assignments", $request);
 			
 			$validator = Validator::make($request->all(), $rules);
 			
@@ -86,9 +85,9 @@ class MeasurementsController extends Controller
 				return redirect()->back()->withErrors($validator)->withInput();
 			}
 			
-			$insert_id = Module::insert("Measurements", $request);
+			$insert_id = Module::insert("Assignments", $request);
 			
-			return redirect()->route(config('laraadmin.adminRoute') . '.measurements.index');
+			return redirect()->route(config('laraadmin.adminRoute') . '.assignments.index');
 			
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
@@ -96,30 +95,30 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Display the specified measurement.
+	 * Display the specified assignment.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id)
 	{
-		if(Module::hasAccess("Measurements", "view")) {
+		if(Module::hasAccess("Assignments", "view")) {
 			
-			$measurement = Measurement::find($id);
-			if(isset($measurement->id)) {
-				$module = Module::get('Measurements');
-				$module->row = $measurement;
+			$assignment = Assignment::find($id);
+			if(isset($assignment->id)) {
+				$module = Module::get('Assignments');
+				$module->row = $assignment;
 				
-				return view('la.measurements.show', [
+				return view('la.assignments.show', [
 					'module' => $module,
 					'view_col' => $this->view_col,
 					'no_header' => true,
 					'no_padding' => "no-padding"
-				])->with('measurement', $measurement);
+				])->with('assignment', $assignment);
 			} else {
 				return view('errors.404', [
 					'record_id' => $id,
-					'record_name' => ucfirst("measurement"),
+					'record_name' => ucfirst("assignment"),
 				]);
 			}
 		} else {
@@ -128,28 +127,28 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Show the form for editing the specified measurement.
+	 * Show the form for editing the specified assignment.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id)
 	{
-		if(Module::hasAccess("Measurements", "edit")) {			
-			$measurement = Measurement::find($id);
-			if(isset($measurement->id)) {	
-				$module = Module::get('Measurements');
+		if(Module::hasAccess("Assignments", "edit")) {			
+			$assignment = Assignment::find($id);
+			if(isset($assignment->id)) {	
+				$module = Module::get('Assignments');
 				
-				$module->row = $measurement;
+				$module->row = $assignment;
 				
-				return view('la.measurements.edit', [
+				return view('la.assignments.edit', [
 					'module' => $module,
 					'view_col' => $this->view_col,
-				])->with('measurement', $measurement);
+				])->with('assignment', $assignment);
 			} else {
 				return view('errors.404', [
 					'record_id' => $id,
-					'record_name' => ucfirst("measurement"),
+					'record_name' => ucfirst("assignment"),
 				]);
 			}
 		} else {
@@ -158,7 +157,7 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Update the specified measurement in storage.
+	 * Update the specified assignment in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @param  int  $id
@@ -166,9 +165,9 @@ class MeasurementsController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		if(Module::hasAccess("Measurements", "edit")) {
+		if(Module::hasAccess("Assignments", "edit")) {
 			
-			$rules = Module::validateRules("Measurements", $request, true);
+			$rules = Module::validateRules("Assignments", $request, true);
 			
 			$validator = Validator::make($request->all(), $rules);
 			
@@ -176,9 +175,9 @@ class MeasurementsController extends Controller
 				return redirect()->back()->withErrors($validator)->withInput();;
 			}
 			
-			$insert_id = Module::updateRow("Measurements", $request, $id);
+			$insert_id = Module::updateRow("Assignments", $request, $id);
 			
-			return redirect()->route(config('laraadmin.adminRoute') . '.measurements.index');
+			return redirect()->route(config('laraadmin.adminRoute') . '.assignments.index');
 			
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
@@ -186,18 +185,18 @@ class MeasurementsController extends Controller
 	}
 
 	/**
-	 * Remove the specified measurement from storage.
+	 * Remove the specified assignment from storage.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id)
 	{
-		if(Module::hasAccess("Measurements", "delete")) {
-			Measurement::find($id)->delete();
+		if(Module::hasAccess("Assignments", "delete")) {
+			Assignment::find($id)->delete();
 			
 			// Redirecting to index() method
-			return redirect()->route(config('laraadmin.adminRoute') . '.measurements.index');
+			return redirect()->route(config('laraadmin.adminRoute') . '.assignments.index');
 		} else {
 			return redirect(config('laraadmin.adminRoute')."/");
 		}
@@ -210,11 +209,11 @@ class MeasurementsController extends Controller
 	 */
 	public function dtajax()
 	{
-		$values = DB::table('measurements')->select($this->listing_cols)->whereNull('deleted_at');
+		$values = DB::table('assignments')->select($this->listing_cols)->whereNull('deleted_at');
 		$out = Datatables::of($values)->make();
 		$data = $out->getData();
 
-		$fields_popup = ModuleFields::getModuleFields('Measurements');
+		$fields_popup = ModuleFields::getModuleFields('Assignments');
 		
 		for($i=0; $i < count($data->data); $i++) {
 			for ($j=0; $j < count($this->listing_cols); $j++) { 
@@ -223,7 +222,7 @@ class MeasurementsController extends Controller
 					$data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
 				}
 				if($col == $this->view_col) {
-					$data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/measurements/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
+					$data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/assignments/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
 				}
 				// else if($col == "author") {
 				//    $data->data[$i][$j];
@@ -232,12 +231,12 @@ class MeasurementsController extends Controller
 			
 			if($this->show_action) {
 				$output = '';
-				if(Module::hasAccess("Measurements", "edit")) {
-					$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/measurements/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
+				if(Module::hasAccess("Assignments", "edit")) {
+					$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/assignments/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
 				}
 				
-				if(Module::hasAccess("Measurements", "delete")) {
-					$output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.measurements.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+				if(Module::hasAccess("Assignments", "delete")) {
+					$output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.assignments.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
 					$output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
 					$output .= Form::close();
 				}

@@ -198,7 +198,7 @@ class CustomersController extends Controller
 			}
 			if($this->show_action) {
 				$output = '';
-				$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customer/measurement/'.$data->data[$i][0]).'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;margin:0 3px;"><i class="fa fa-list"></i></a>';
+				$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customer/measurement/'.$data->data[$i][0]).'" class="btn btn-info btn-xs" style="display:inline;padding:2px 5px 3px 5px;margin:0 3px;"><i class="fa fa-list"></i></a>';
 				if(Module::hasAccess("Customers", "edit")) {
 					$output .= '<a href="'.url(config('laraadmin.adminRoute') . '/customers/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
 				}
@@ -224,21 +224,17 @@ class CustomersController extends Controller
 	{
 		 $id =  $request->id;
 		 $customer_id = $request->customer_id;
-        //DB::enableQueryLog();
-
-
-		
-
-		//print_r(json_decode($json, true));
-		//$laQuery = DB::getQueryLog();
-
-		//echo '<pre>';print_r($laQuery);
+         DB::enableQueryLog();
 
         $res = array();
 		$output ='';
 		$msg ='';
 
 		$parts = DB::select( DB::raw("SELECT * FROM measurement_parts where category_id =$id") );
+
+$query = DB::getQueryLog(); 
+		$query = end($query);
+print_r($query);
 
 
 		if($parts){
@@ -252,6 +248,9 @@ class CustomersController extends Controller
 							type="text" >
 						    </div>';
 			}
+	    } else {
+
+	    	$output.= '0';
 	    }
 
         $Umsr = DB::select( DB::raw("SELECT * FROM user_measurements where cat_id = $id && customer_id = $customer_id ") );
@@ -273,6 +272,9 @@ class CustomersController extends Controller
 		    	}
 
 		    	$msg.='</ul>';
+	        }else{
+
+	        	$msg.= '0';
 	        }
 		}
 

@@ -22,7 +22,7 @@
 	</div>
 	<div class="box-body">
 		<div class="row">
-			<div class="col-md-6 col-md-offset-2" id="user_fields">
+			<div class="col-md-5 col-md-offset-2" id="user_fields">
 				<form method="POST" action="{{  url('admin/customer/save') }}" accept-charset="UTF-8" id="" novalidate="novalidate">
 					{{  csrf_field() }}
 					<div class="form-group"><label for="cat_id">Select Category* :</label>
@@ -47,8 +47,9 @@
 					</div>
 				</form>
 			</div>
+<br />W
+			<div class="col-md-3 user_record" style="display: none;">
 
-			<div class="col-md-2 user_record" style="display: none;">
 				<ul class="list-group">
 					  <li class="list-group-item active"><strong class="text-center">User Measurements</strong> </li>
 					  <li class="list-group-item">Dapibus ac facilisis in <span class="pull-right">Test</span></li>

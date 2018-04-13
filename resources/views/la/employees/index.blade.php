@@ -1,7 +1,7 @@
 @extends("la.layouts.app")
 
 @section("contentheader_title", "Employees")
-@section("contentheader_description", "employees listing")
+@section("contentheader_description", "Employees listing")
 @section("section", "Employees")
 @section("sub_section", "Listing")
 @section("htmlheader_title", "Employees Listing")
@@ -74,17 +74,6 @@
 					@la_input($module, 'date_left')
 					@la_input($module, 'salary_cur')
 					--}}
-					<div class="form-group">
-						<label for="role">Role* :</label>
-						<select class="form-control" required="1" data-placeholder="Select Role" rel="select2" name="role">
-							<?php $roles = App\Role::all(); ?>
-							@foreach($roles as $role)
-								@if($role->id != 1)
-									<option value="{{ $role->id }}">{{ $role->name }}</option>
-								@endif
-							@endforeach
-						</select>
-					</div>
 				</div>
 			</div>
 			<div class="modal-footer">

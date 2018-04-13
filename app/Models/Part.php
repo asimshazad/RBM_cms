@@ -6,11 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Measurement_Part extends Model
+class Part extends Model
 {
     use SoftDeletes;
 	
-	protected $table = 'measurement_parts';
+	protected $table = 'parts';
 	
 	protected $hidden = [
         

@@ -9,56 +9,61 @@
         <section class="content">
           <!-- Small boxes (Stat box) -->
           <div class="row">
+
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>{{  $customers }}</h3>
+                  <p>Customers</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="{{  url('admin/customers') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div><!-- ./col -->
+
+
+
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-aqua">
                 <div class="inner">
-                  <h3>150</h3>
+                  <h3>{{  $orders }}</h3>
                   <p>New Orders</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-bag"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{  url('admin/orders') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3>53<sup style="font-size: 20px">%</sup></h3>
-                  <p>Bounce Rate</p>
+                  <h3>{{  $employees }}</h3>
+                  <p>Employees</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{  url('admin/employees') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3>44</h3>
-                  <p>User Registrations</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-person-add"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div><!-- ./col -->
+            
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="small-box bg-red">
                 <div class="inner">
-                  <h3>65</h3>
-                  <p>Unique Visitors</p>
+                  <h3>{{ $expenses }}</h3>
+                  <p>Expenses</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{  url('admin/employees') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
           </div><!-- /.row -->
@@ -480,12 +485,12 @@
 (function($) {
 	$('body').pgNotification({
 		style: 'circle',
-		title: 'LaraAdmin',
-		message: "Welcome to LaraAdmin...",
+		title: 'Raj By Mansoor',
+		message: "Tailor Management System",
 		position: "top-right",
 		timeout: 0,
 		type: "success",
-		thumbnail: '<img width="40" height="40" style="display: inline-block;" src="{{ Gravatar::fallback(asset('la-assets/img/user2-160x160.jpg'))->get(Auth::user()->email, 'default') }}" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" alt="">'
+		thumbnail: '<img width="40" height="40" style="display: inline-block;" src="la-assets/img/avatar5.png" data-src="la-assets/img/avatar5.png" data-src-retina="la-assets/img/avatar5.png" alt="">'
 	}).show();
 })(window.jQuery);
 </script>
