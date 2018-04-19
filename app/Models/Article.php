@@ -6,11 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Assignment extends Model
+class Article extends Model
 {
     use SoftDeletes;
 	
-	protected $table = 'assignments';
+	protected $table = 'articles';
 	
 	protected $hidden = [
         
@@ -19,10 +19,4 @@ class Assignment extends Model
 	protected $guarded = [];
 
 	protected $dates = ['deleted_at'];
-
-
-	public function saveAssignments()
-	{
-		
-	}
 }

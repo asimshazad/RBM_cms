@@ -107,4 +107,10 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	/* ================== Assignments ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/assignments', 'LA\AssignmentsController');
 	Route::get(config('laraadmin.adminRoute') . '/assignment_dt_ajax', 'LA\AssignmentsController@dtajax');
+	Route::post(config('laraadmin.adminRoute') . '/assignments/save', 'LA\AssignmentsController@storeAssignments');
+	Route::post(config('laraadmin.adminRoute') . '/get_parts_by_cat', 'LA\AssignmentsController@get_parts_by_cat_id');
+
+	/* ================== Articles ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/articles', 'LA\ArticlesController');
+	Route::get(config('laraadmin.adminRoute') . '/article_dt_ajax', 'LA\ArticlesController@dtajax');
 });

@@ -24,6 +24,9 @@
     </div>
 @endif
 
+
+
+
 <div class="box box-success">
 
 	<div class="box-body">
@@ -32,26 +35,32 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add Assignment</h4>
+				<h4 class="modal-title" id="myModalLabel">Category Assignment</h4>
 			</div>
-			{!! Form::open(['action' => 'LA\AssignmentsController@store', 'id' => 'assignment-add-form']) !!}
+			<form action="{{  url('/admin/assignments/save') }}" method="POST">
+				{{ csrf_field() }}
 			<div class="modal-body">
 				<div class="box-body">
                    <div class="form-group"><label for="cat_id">Select Category* :</label>
-						<select class="form-control" name="cat_id" id="cat_id" required="">
-							<option>--select--</option>
+						<select class="form-control" name="category_id" id="category_id" required="">
+							<option value="">--select--</option>
 							@foreach($categories as $row)
 							<option value="{{  $row->id }}">{{ $row->name }}</option>
 							@endforeach
 						</select>
 					</div>
+                    <div class="form-group" id="parts_list">
+
+                    	<p>Please select a category to assign </p>
+
+					 
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				{!! Form::submit( 'Submit', ['class'=>'btn btn-success']) !!}
 			</div>
-			{!! Form::close() !!}
+			</form>
 		</div>
 	</div>
 
@@ -60,60 +69,43 @@
 	</div>
 </div>
 
-@la_access("Assignments", "create")
-<div class="modal fade" id="AddModal" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add Assignment</h4>
-			</div>
-			{!! Form::open(['action' => 'LA\AssignmentsController@store', 'id' => 'assignment-add-form']) !!}
-			<div class="modal-body">
-				<div class="box-body">
-                    @la_form($module)
 
-					{{--
-					@la_input($module, 'category_id')
-					--}}
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				{!! Form::submit( 'Submit', ['class'=>'btn btn-success']) !!}
-			</div>
-			{!! Form::close() !!}
-		</div>
-	</div>
-</div>
-@endla_access
 
 @endsection
 
-@push('styles')
-<link rel="stylesheet" type="text/css" href="{{ asset('la-assets/plugins/datatables/datatables.min.css') }}"/>
-@endpush
+
+
 
 @push('scripts')
-<script src="{{ asset('la-assets/plugins/datatables/datatables.min.js') }}"></script>
-<script>
-$(function () {
-	$("#example1").DataTable({
-		processing: true,
-        serverSide: true,
-        ajax: "{{ url(config('laraadmin.adminRoute') . '/assignment_dt_ajax') }}",
-		language: {
-			lengthMenu: "_MENU_",
-			search: "_INPUT_",
-			searchPlaceholder: "Search"
-		},
-		@if($show_actions)
-		columnDefs: [ { orderable: false, targets: [-1] }],
-		@endif
-	});
-	$("#assignment-add-form").validate({
+<script type="text/javascript">
+
+	var APP_URL = {!! json_encode(url('/')) !!};
+
+	$("select[name='category_id']").change(function(){
+
+		var cat_id = $(this).val();
 		
+		var token = $("input[name='_token']").val();
+		if(cat_id){
+			$.ajax({
+				url : APP_URL+'/admin/get_parts_by_cat',
+				method: 'POST',
+				//dataType: 'json',
+				data: {id:cat_id,_token:token},
+				beforeSend: function() {
+					$(".loader").show();
+				},
+				success: function(data) {
+
+					$('#parts_list').html(data);
+
+					$(".loader").hide();
+					$('.btn-save').prop('disabled', false);
+					
+				}
+			});
+		}
 	});
-});
 </script>
+
 @endpush

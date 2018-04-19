@@ -18,6 +18,7 @@ use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
 use App\Models\Assignment;
+use App\Models\PartAssignment;
 
 class AssignmentsController extends Controller
 {
@@ -46,8 +47,9 @@ class AssignmentsController extends Controller
 	{
 
         $categories = DB::select( DB::raw("SELECT * FROM categories ORDER BY id DESC") );
+        $parts = DB::select( DB::raw("SELECT * FROM parts ORDER BY id DESC") );
 
-		return view('la.assignments.index',compact('categories'));
+		return view('la.assignments.index',compact('categories','parts'));
 
 		if(Module::hasAccess($module->id)) {
 			return View('la.assignments.index', [
@@ -58,6 +60,51 @@ class AssignmentsController extends Controller
 		} else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
+	}
+
+	function storeAssignments(Request $request)
+	{
+		$parts = $request->part_id;
+		$category_id = $request->category_id;
+		
+
+		for ($i = 0; $i < count($parts); $i++) {
+   
+			   $PartAssignment = new PartAssignment;
+			   $PartAssignment->category_id = $category_id;
+			   $PartAssignment->part_id =  $parts[$i];
+			   $PartAssignment->save();
+
+		}
+
+	}
+
+
+	function get_parts_by_cat_id(Request $request)
+	{
+		$id = $request->id;
+		$parts = DB::select( DB::raw("SELECT * FROM parts ORDER BY id DESC") );
+
+	    $Datatables = DB::select( DB::raw("SELECT part_id FROM part_assignments WHERE category_id =$id") );
+
+
+	    if(count($Datatables) > 0){
+
+	    	$old_parts = array();
+            foreach ($Datatables as $row) {
+            	//echo '<pre>';print_r($row);
+                $old_parts[$row->part_id] = $row->part_id;
+            }
+
+	    }
+
+//	    echo  '<pre>';print_r($data);
+
+//	    $old_parts = json_decode(json_encode((array) $data), true);
+
+
+	    return view('la.assignments.parts_list',compact('parts','old_parts'));
+
 	}
 
 	/**
