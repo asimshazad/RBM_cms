@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "dwij/laraadmin": "1.0.40",
-        "dwij/laeditor": "^0.1.6"
+        "dwij/laeditor": "^0.1.6",
+        "barryvdh/laravel-debugbar": "2.4.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

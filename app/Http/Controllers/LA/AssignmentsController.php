@@ -66,6 +66,12 @@ class AssignmentsController extends Controller
 	{
 		$parts = $request->part_id;
 		$category_id = $request->category_id;
+
+
+		if($category_id != '')
+		{
+			DB::delete('delete from part_assignments where category_id = "'.$category_id.'"');
+		}
 		
 
 		for ($i = 0; $i < count($parts); $i++) {
@@ -76,15 +82,16 @@ class AssignmentsController extends Controller
 			   $PartAssignment->save();
 
 		}
+		return redirect()->route(config('laraadmin.adminRoute') . '.assignments.index');
 
 	}
 
 
 	function get_parts_by_cat_id(Request $request)
 	{
+
 		$id = $request->id;
 		$parts = DB::select( DB::raw("SELECT * FROM parts ORDER BY id DESC") );
-
 	    $Datatables = DB::select( DB::raw("SELECT part_id FROM part_assignments WHERE category_id =$id") );
 
 
@@ -97,11 +104,6 @@ class AssignmentsController extends Controller
             }
 
 	    }
-
-//	    echo  '<pre>';print_r($data);
-
-//	    $old_parts = json_decode(json_encode((array) $data), true);
-
 
 	    return view('la.assignments.parts_list',compact('parts','old_parts'));
 

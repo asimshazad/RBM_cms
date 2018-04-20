@@ -19,11 +19,9 @@ class CreateCustomersTable extends Migration
     {
         Module::generate("Customers", 'customers', 'name', 'fa-user-plus', [
             ["name", "Name", "TextField", false, "", 0, 256, false],
-            ["email", "Email", "Email", false, "", 0, 256, false],
             ["phone", "Phone", "Mobile", false, "", 0, 20, true],
             ["city", "City", "TextField", false, "", 0, 256, false],
             ["department", "Department", "TextField", false, "", 0, 256, false],
-            ["image", "Image", "Image", false, "", 0, 0, false],
         ]);
 		
 		/*

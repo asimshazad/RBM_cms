@@ -24,17 +24,6 @@
     </div>
 @endif
 
-
-
-
-@if(session()->has('success'))
-    <div class="alert alert-success">
-        {{ session()->get('success') }}
-    </div>
-@endif
-
-
-
 <div class="box box-success">
 	<!--<div class="box-header"></div>-->
 	<div class="box-body">
@@ -50,7 +39,7 @@
 		</tr>
 		</thead>
 		<tbody>
-
+			
 		</tbody>
 		</table>
 	</div>
@@ -71,11 +60,9 @@
 					
 					{{--
 					@la_input($module, 'name')
-					@la_input($module, 'email')
 					@la_input($module, 'phone')
 					@la_input($module, 'city')
 					@la_input($module, 'department')
-					@la_input($module, 'image')
 					--}}
 				</div>
 			</div>

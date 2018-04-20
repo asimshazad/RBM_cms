@@ -30,16 +30,13 @@
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
 				{!! Form::model($customer, ['route' => [config('laraadmin.adminRoute') . '.customers.update', $customer->id ], 'method'=>'PUT', 'id' => 'customer-edit-form']) !!}
-				<?php //echo '<pre>';print_r($module);?>
-				@la_form($module)
+					@la_form($module)
 					
 					{{--
 					@la_input($module, 'name')
-					@la_input($module, 'email')
 					@la_input($module, 'phone')
 					@la_input($module, 'city')
 					@la_input($module, 'department')
-					@la_input($module, 'image')
 					--}}
                     <br>
 					<div class="form-group">

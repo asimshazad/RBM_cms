@@ -16,11 +16,12 @@ use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 use App\Models\Customer;
 use App\Models\UserMeasurements;
+use App\Models\PartAssignment;
 class CustomersController extends Controller
 {
 	public $show_action = true;
 	public $view_col = 'name';
-	public $listing_cols = ['id', 'name', 'email', 'phone', 'city', 'department', 'image'];
+	public $listing_cols = ['id', 'name', 'phone', 'city', 'department'];
 	public function __construct() {
 		// Field Access of Listing Columns
 		if(\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
@@ -216,7 +217,7 @@ class CustomersController extends Controller
 	public function customer_measurement($id)
 	{
 		$module = Module::get('Measurements');
-		$categories = DB::select( DB::raw("SELECT * FROM measurement_categories") );
+		$categories = DB::select( DB::raw("SELECT * FROM categories") );
 		return view('la.customers.customer_measurement',compact('categories'));
 	}
 
@@ -230,7 +231,14 @@ class CustomersController extends Controller
 		$output ='';
 		$msg ='';
 
-		$parts = DB::select( DB::raw("SELECT * FROM measurement_parts where category_id =$id") );
+		//$parts = DB::select( DB::raw("SELECT * FROM  part_assignments where category_id =$id") );
+
+		$parts = PartAssignment::with('parts')->whereCategoryId($id)->get();
+
+
+		//echo '<pre>';print_r($parts);die;
+
+
 
 $query = DB::getQueryLog(); 
 		$query = end($query);
@@ -239,12 +247,13 @@ print_r($query);
 
 		if($parts){
 
-			foreach($parts as $part){
+			foreach($parts as $row){
+				//echo '<pre>';print_r($row);
 				$output.= '<div class="form-group">
-							<label for="total_amount">'.ucwords($part->part).'* :</label>
+							<label for="total_amount">'.($row->parts['name']).'* :</label>
 							<input required=""  class="form-control"
-							placeholder="Enter '.ucfirst($part->part).'"
-							name="'.str_slug($part->part).'"
+							placeholder="Enter '.ucfirst($row->id).'"
+							name="'.str_slug($row->id).'"
 							type="text" >
 						    </div>';
 			}
@@ -253,30 +262,30 @@ print_r($query);
 	    	$output.= '0';
 	    }
 
-        $Umsr = DB::select( DB::raw("SELECT * FROM user_measurements where cat_id = $id && customer_id = $customer_id ") );
+  //       $Umsr = DB::select( DB::raw("SELECT * FROM user_measurements where cat_id = $id && customer_id = $customer_id ") );
 
-		if(count($Umsr)){
+		// if(count($Umsr)){
 
-			$json =  $Umsr[0]->description;
+		// 	$json =  $Umsr[0]->description;
 
-	        $rec =  json_decode($json, true);
+	 //        $rec =  json_decode($json, true);
 
-	        if($rec)
-	        {
-	        	$msg.='<ul class="list-group">';
-	        	$msg.='<li class="list-group-item active"><strong class="text-center">User Measurements</strong> </li>';
-		    	foreach($rec as $key=>$row){
+	 //        if($rec)
+	 //        {
+	 //        	$msg.='<ul class="list-group">';
+	 //        	$msg.='<li class="list-group-item active"><strong class="text-center">User Measurements</strong> </li>';
+		//     	foreach($rec as $key=>$row){
 
-		    		$msg.= '<li class="list-group-item">'.$key.'<span class="pull-right">'.$row.'</span></li>';
+		//     		$msg.= '<li class="list-group-item">'.$key.'<span class="pull-right">'.$row.'</span></li>';
 
-		    	}
+		//     	}
 
-		    	$msg.='</ul>';
-	        }else{
+		//     	$msg.='</ul>';
+	 //        }else{
 
-	        	$msg.= '0';
-	        }
-		}
+	 //        	$msg.= '0';
+	 //        }
+		// }
 
 
 

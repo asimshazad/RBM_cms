@@ -10,7 +10,7 @@ class Assignment extends Model
 {
     use SoftDeletes;
 	
-	protected $table = 'assignments';
+	protected $table = 'part_assignments';
 	
 	protected $hidden = [
         
